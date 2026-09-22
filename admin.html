@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — Graphic Cafe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/css/admin.css" />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+</head>
+<body class="admin-body">
+
+<!-- ░░ LOGIN SCREEN ░░ -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-bg">
+    <div class="login-shape s1"></div>
+    <div class="login-shape s2"></div>
+    <div class="login-shape s3"></div>
+  </div>
+  <div class="login-card">
+    <div class="login-logo">
+      <svg width="48" height="48" viewBox="0 0 36 36" fill="none">
+        <rect width="36" height="36" rx="10" fill="url(#loginGrad)"/>
+        <path d="M10 26L18 10L26 26" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13 21H23" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="loginGrad" x1="0" y1="0" x2="36" y2="36">
+            <stop offset="0%" stop-color="#ff6b35"/>
+            <stop offset="100%" stop-color="#7c3aed"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div>
+        <span class="login-brand">Graphic<strong>Cafe</strong></span>
+        <span class="login-sub">Admin Dashboard</span>
+      </div>
+    </div>
+    <h2>Welcome Back</h2>
+    <p class="login-desc">Sign in to access your dashboard</p>
+    <form id="loginForm" novalidate>
+      <div class="login-field">
+        <label for="loginUsername"><i class="fa-solid fa-user"></i> Username</label>
+        <input type="text" id="loginUsername" placeholder="admin" autocomplete="username" required />
+      </div>
+      <div class="login-field">
+        <label for="loginPassword"><i class="fa-solid fa-lock"></i> Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" required />
+          <button type="button" class="pw-toggle" id="pwToggle"><i class="fa-solid fa-eye"></i></button>
+        </div>
+      </div>
+      <div id="loginError" class="login-error" style="display:none">
+        <i class="fa-solid fa-circle-exclamation"></i> <span></span>
+      </div>
+      <button type="submit" class="login-btn" id="loginBtn">
+        <span class="btn-text">Sign In</span>
+        <span class="btn-loading" style="display:none"><i class="fa-solid fa-spinner fa-spin"></i></span>
+        <i class="fa-solid fa-arrow-right btn-icon"></i>
+      </button>
+    </form>
+    <a href="/" class="login-back"><i class="fa-solid fa-arrow-left"></i> Back to Website</a>
+  </div>
+</div>
+
+<!-- ░░ DASHBOARD APP ░░ -->
+<div id="dashboardApp" class="dashboard-app" style="display:none">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="/" class="sidebar-logo">
+        <svg width="32" height="32" viewBox="0 0 36 36" fill="none">
+          <rect width="36" height="36" rx="10" fill="url(#sideGrad)"/>
+          <path d="M10 26L18 10L26 26" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M13 21H23" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="sideGrad" x1="0" y1="0" x2="36" y2="36">
+              <stop offset="0%" stop-color="#ff6b35"/>
+              <stop offset="100%" stop-color="#7c3aed"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span>Graphic<strong>Cafe</strong></span>
+      </a>
+      <button class="sidebar-close" id="sidebarClose"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="overview">
+        <i class="fa-solid fa-chart-line"></i> <span>Overview</span>
+      </button>
+      <button class="nav-item" data-page="visitors">
+        <i class="fa-solid fa-users"></i> <span>Visitors</span>
+        <span class="nav-badge" id="visitorBadge"></span>
+      </button>
+      <button class="nav-item" data-page="contacts">
+        <i class="fa-solid fa-envelope"></i> <span>Inquiries</span>
+        <span class="nav-badge" id="contactBadge"></span>
+      </button>
+      <button class="nav-item" data-page="settings">
+        <i class="fa-solid fa-gear"></i> <span>Settings</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="admin-info">
+        <div class="admin-avatar" id="adminAvatar">A</div>
+        <div>
+          <span class="admin-name" id="adminName">Admin</span>
+          <span class="admin-role">Administrator</span>
+        </div>
+      </div>
+      <button class="logout-btn" id="logoutBtn" title="Logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+      <div class="topbar-title">
+        <h1 id="pageTitle">Overview</h1>
+        <span id="pageSubtitle">Welcome back! Here's what's happening.</span>
+      </div>
+      <div class="topbar-actions">
+        <button class="topbar-btn" id="refreshBtn" title="Refresh data">
+          <i class="fa-solid fa-arrows-rotate"></i>
+        </button>
+        <a href="/" target="_blank" class="topbar-btn" title="View website">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+        <div class="topbar-time" id="topbarTime"></div>
+      </div>
+    </header>
+
+    <!-- Pages -->
+    <div class="page-content">
+
+      <!-- ── OVERVIEW PAGE ── -->
+      <div class="page active" id="page-overview">
+
+        <!-- Stat Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card-icon violet"><i class="fa-solid fa-users"></i></div>
+            <div class="stat-card-body">
+              <span class="stat-card-label">Total Visitors</span>
+              <span class="stat-card-num" id="st-total-visitors">—</span>
+              <span class="stat-card-sub" id="st-today-visitors">Today: —</span>
+            </div>
+            <div class="stat-card-trend up"><i class="fa-solid fa-arrow-trend-up"></i></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon orange"><i class="fa-solid fa-eye"></i></div>
+            <div class="stat-card-body">
+              <span class="stat-card-label">Page Views</span>
+              <span class="stat-card-num" id="st-page-views">—</span>
+              <span class="stat-card-sub" id="st-today-pv">Today: —</span>
+            </div>
+            <div class="stat-card-trend up"><i class="fa-solid fa-arrow-trend-up"></i></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon green"><i class="fa-solid fa-envelope"></i></div>
+            <div class="stat-card-body">
+              <span class="stat-card-label">Inquiries</span>
+              <span class="stat-card-num" id="st-total-contacts">—</span>
+              <span class="stat-card-sub" id="st-new-contacts">New: —</span>
+            </div>
+            <div class="stat-card-trend up"><i class="fa-solid fa-arrow-trend-up"></i></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon blue"><i class="fa-solid fa-calendar-week"></i></div>
+            <div class="stat-card-body">
+              <span class="stat-card-label">This Week</span>
+              <span class="stat-card-num" id="st-week-visitors">—</span>
+              <span class="stat-card-sub">visitors this week</span>
+            </div>
+            <div class="stat-card-trend up"><i class="fa-solid fa-arrow-trend-up"></i></div>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="charts-row">
+          <!-- Visitors Chart -->
+          <div class="chart-card wide">
+            <div class="chart-card-header">
+              <h3>Visitor Trend <span>(Last 14 Days)</span></h3>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="visitorsChart" height="220"></canvas>
+            </div>
+          </div>
+
+          <!-- Device Breakdown -->
+          <div class="chart-card">
+            <div class="chart-card-header"><h3>Devices</h3></div>
+            <div class="donut-wrap">
+              <canvas id="deviceChart" height="200"></canvas>
+            </div>
+            <div class="donut-legend" id="deviceLegend"></div>
+          </div>
+        </div>
+
+        <!-- Bottom Row -->
+        <div class="bottom-row">
+          <!-- Top Pages -->
+          <div class="list-card">
+            <div class="list-card-header">
+              <h3>Top Pages</h3>
+            </div>
+            <div id="topPagesList" class="list-card-body"></div>
+          </div>
+
+          <!-- Browser Breakdown -->
+          <div class="list-card">
+            <div class="list-card-header"><h3>Browsers</h3></div>
+            <div id="browserList" class="list-card-body"></div>
+          </div>
+
+          <!-- Recent Inquiries Quick -->
+          <div class="list-card wide">
+            <div class="list-card-header">
+              <h3>Recent Inquiries</h3>
+              <button class="list-view-all" data-page="contacts">View All</button>
+            </div>
+            <div id="recentContacts" class="list-card-body"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── VISITORS PAGE ── -->
+      <div class="page" id="page-visitors">
+        <div class="page-toolbar">
+          <div class="search-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="visitorSearch" placeholder="Search by IP, page, browser…" />
+          </div>
+          <button class="toolbar-btn" id="visitorRefresh">
+            <i class="fa-solid fa-arrows-rotate"></i> Refresh
+          </button>
+        </div>
+
+        <div class="data-table-wrap">
+          <table class="data-table" id="visitorsTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>IP Address</th>
+                <th>Device</th>
+                <th>Browser / OS</th>
+                <th>Page</th>
+                <th>Referrer</th>
+                <th>Views</th>
+                <th>Last Seen</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="visitorsBody">
+              <tr><td colspan="9" class="table-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination" id="visitorPagination"></div>
+      </div>
+
+      <!-- ── CONTACTS PAGE ── -->
+      <div class="page" id="page-contacts">
+        <div class="page-toolbar">
+          <div class="filter-tabs">
+            <button class="ftab active" data-status="">All</button>
+            <button class="ftab" data-status="new">New</button>
+            <button class="ftab" data-status="in-progress">In Progress</button>
+            <button class="ftab" data-status="completed">Completed</button>
+          </div>
+          <button class="toolbar-btn" id="contactRefresh">
+            <i class="fa-solid fa-arrows-rotate"></i> Refresh
+          </button>
+        </div>
+
+        <div class="data-table-wrap">
+          <table class="data-table" id="contactsTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email / Phone</th>
+                <th>Service</th>
+                <th>Budget</th>
+                <th>Message</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="contactsBody">
+              <tr><td colspan="9" class="table-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination" id="contactPagination"></div>
+      </div>
+
+      <!-- ── SETTINGS PAGE ── -->
+      <div class="page" id="page-settings">
+        <div class="settings-grid">
+
+          <!-- WhatsApp Settings -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <i class="fa-brands fa-whatsapp" style="color:#25D366"></i>
+              <h3>WhatsApp Notifications</h3>
+            </div>
+            <form id="whatsappSettingsForm" class="settings-form">
+              <div class="settings-field">
+                <label>Enable Notifications</label>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="waEnabled" />
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+              <div class="settings-field">
+                <label for="waPhone">WhatsApp Phone Number</label>
+                <input type="text" id="waPhone" placeholder="+919876543210" />
+                <span class="field-hint">Include country code e.g. +91XXXXXXXXXX</span>
+              </div>
+              <div class="settings-field">
+                <label for="waApiKey">CallMeBot API Key</label>
+                <input type="text" id="waApiKey" placeholder="Your CallMeBot API key" />
+                <span class="field-hint">
+                  Get your free API key from
+                  <a href="https://www.callmebot.com/blog/free-api-whatsapp-messages/" target="_blank" rel="noopener">callmebot.com</a>
+                </span>
+              </div>
+              <div class="settings-info">
+                <i class="fa-solid fa-circle-info"></i>
+                <div>
+                  <strong>Setup Instructions:</strong>
+                  <ol>
+                    <li>Add <strong>+34 644 75 37 97</strong> to your WhatsApp contacts</li>
+                    <li>Send <em>"I allow callmebot to send me messages"</em> to that number</li>
+                    <li>You'll receive your API key via WhatsApp</li>
+                    <li>Enter your phone number and API key above</li>
+                  </ol>
+                </div>
+              </div>
+              <button type="submit" class="settings-save-btn">
+                <i class="fa-solid fa-floppy-disk"></i> Save WhatsApp Settings
+              </button>
+            </form>
+          </div>
+
+          <!-- Site Settings -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <i class="fa-solid fa-globe" style="color:#7c3aed"></i>
+              <h3>Site Settings</h3>
+            </div>
+            <form id="siteSettingsForm" class="settings-form">
+              <div class="settings-field">
+                <label for="siteName">Site Name</label>
+                <input type="text" id="siteName" placeholder="Graphic Cafe" />
+              </div>
+              <div class="settings-field">
+                <label for="contactEmail">Contact Email</label>
+                <input type="email" id="contactEmail" placeholder="info@graphiccafe.com" />
+              </div>
+              <button type="submit" class="settings-save-btn">
+                <i class="fa-solid fa-floppy-disk"></i> Save Site Settings
+              </button>
+            </form>
+          </div>
+
+          <!-- Change Password -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <i class="fa-solid fa-shield-halved" style="color:#ff6b35"></i>
+              <h3>Change Password</h3>
+            </div>
+            <form id="passwordForm" class="settings-form">
+              <div class="settings-field">
+                <label for="currentPw">Current Password</label>
+                <input type="password" id="currentPw" placeholder="••••••••" />
+              </div>
+              <div class="settings-field">
+                <label for="newPw">New Password</label>
+                <input type="password" id="newPw" placeholder="Min 8 characters" />
+              </div>
+              <div class="settings-field">
+                <label for="confirmPw">Confirm New Password</label>
+                <input type="password" id="confirmPw" placeholder="Repeat new password" />
+              </div>
+              <button type="submit" class="settings-save-btn danger">
+                <i class="fa-solid fa-key"></i> Update Password
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </main>
+
+</div><!-- /dashboard-app -->
+
+<!-- Toast Notification -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Contact Detail Modal -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal-card">
+    <button class="modal-close" id="contactModalClose"><i class="fa-solid fa-xmark"></i></button>
+    <div id="contactModalBody"></div>
+  </div>
+</div>
+
+<script src="/js/admin.js"></script>
+</body>
+</html>
